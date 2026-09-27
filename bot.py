@@ -31,6 +31,7 @@ STORE: dict[tuple[str, str], dict[str, Any]] = {}
 CHATS: dict[str, dict[str, Any]] = {}
 FIRED: set[str] = set()
 ENDED: set[str] = set()
+AUTO_STREAK: dict[str, int] = {}
 
 
 # ------------------------------- metadata ---------------------------------
@@ -602,11 +603,23 @@ def _conversation_reply(chat: dict, message: str, category: dict,
     if OPT_OUT.search(message):
         chat["status"] = "ended"
         ENDED.add(chat["id"])
+        AUTO_STREAK[chat.get("merchant_id") or "unknown"] = 0
         return {"action": "end", "rationale": "Explicit opt-out or frustration detected; conversation is closed without another promotional message."}
 
+    auto_key = chat.get("merchant_id") or "unknown"
     if AUTO_REPLY.search(message):
+        streak = AUTO_STREAK.get(auto_key, 0) + 1
+        AUTO_STREAK[auto_key] = streak
+        if streak >= 3:
+            AUTO_STREAK[auto_key] = 0
+            chat["status"] = "ended"
+            ENDED.add(chat["id"])
+            return {"action": "end",
+                    "rationale": "Repeated automated replies with no live engagement across conversations; closing to avoid polling a machine."}
         return {"action": "wait", "wait_seconds": 14400,
                 "rationale": "Canned-business-response pattern detected; backing off four hours for a human response."}
+    # Any live (non-automated) message breaks the streak.
+    AUTO_STREAK[auto_key] = 0
 
     if OFFTOPIC.search(message):
         return {
@@ -836,6 +849,7 @@ async def teardown():
     CHATS.clear()
     FIRED.clear()
     ENDED.clear()
+    AUTO_STREAK.clear()
     return {"status": "wiped"}
 
 

@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+.env
+
+# Generated / local-only (reproducible from tracked seeds + scripts)
+dataset_expanded/
+*.log
+
+# AI agent workspaces / scratch (tracked instruction files like AGENTS.md are intentional)
+.opencode/
+.cursor/
+.windsurf/
+.claude/
+.aider*
+.continue/
+.codeium/
