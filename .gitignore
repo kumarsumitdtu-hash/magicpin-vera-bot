@@ -10,6 +10,9 @@ venv/
 dataset_expanded/
 *.log
 
+# Challenger harness is theirs; our config/key edits stay local-only
+judge_simulator.py
+
 # AI agent workspaces / scratch (tracked instruction files like AGENTS.md are intentional)
 .opencode/
 .cursor/

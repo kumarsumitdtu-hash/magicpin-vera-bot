@@ -38,10 +38,10 @@ AUTO_STREAK: dict[str, int] = {}
 
 META = {
     "team_name": os.getenv("TEAM_NAME", "Independent Vera Build"),
-    "team_members": [x.strip() for x in os.getenv("TEAM_MEMBERS", "Amit").split(",") if x.strip()],
+    "team_members": [x.strip() for x in os.getenv("TEAM_MEMBERS", "Sumit Kumar").split(",") if x.strip()],
     "model": "deterministic-context-planner-v2",
     "approach": "evidence selection + trigger routing + stateful conversation policy",
-    "contact_email": os.getenv("CONTACT_EMAIL", "team@example.com"),
+    "contact_email": os.getenv("CONTACT_EMAIL", "sumitkumar_23ce131@dtu.ac.in"),
     "version": "2.0.0",
     "submitted_at": datetime.now(timezone.utc).isoformat(),
 }
